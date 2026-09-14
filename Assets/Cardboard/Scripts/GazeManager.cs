@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-
 public class GazeManager : MonoBehaviour
 {
     public event Action OnGazeSelection;
@@ -23,25 +22,19 @@ public class GazeManager : MonoBehaviour
     }
 
     [SerializeField] private GameObject gazeBarCanvas;
-    [SerializeField] private Image fillIndicator;
+    [SerializeField] Image fillIndicator;
     [Tooltip("Time in seg")]
-    [SerializeField] private float timeForSelection = 2.5f;
+    [SerializeField] private float timeForSelection =2.5f;
 
     private float timeCounter;
     private float timeProggres;
     private bool runTimer;
-
     void Start()
     {
-        if (gazeBarCanvas != null)
-        {
-            gazeBarCanvas.SetActive(false);
-        }
-        if (fillIndicator != null)
-        {
-            fillIndicator.fillAmount = Normalise();
-        }
+        gazeBarCanvas.SetActive(false);
+        fillIndicator.fillAmount = Normalise();
     }
+
 
     public void Update()
     {
@@ -51,36 +44,23 @@ public class GazeManager : MonoBehaviour
             AddValue(timeProggres);
         }
     }
-
     public void SetUpGaze(float timeForSelection) 
     {
         this.timeForSelection = timeForSelection;
     }
-
     public void StartGazeSelection()
     {
-        if (gazeBarCanvas != null)
-        {
-            gazeBarCanvas.SetActive(true);
-        }
+        gazeBarCanvas.SetActive(true);
         runTimer = true;
         timeProggres = 0;
-        timeCounter = 0;
     }
 
     public void CancelGazeSelection()
     {
-        if (gazeBarCanvas != null)
-        {
-            gazeBarCanvas.SetActive(false);
-        }
+        gazeBarCanvas.SetActive(false);
         runTimer = false;
         timeProggres = 0;
         timeCounter = 0;
-        if (fillIndicator != null)
-        {
-            fillIndicator.fillAmount = 0;
-        }
     }
 
     private void AddValue(float val) 
@@ -90,22 +70,13 @@ public class GazeManager : MonoBehaviour
         {
             timeCounter = 0;
             runTimer = false;
-            if (gazeBarCanvas != null)
-            {
-                gazeBarCanvas.SetActive(false);
-            }
             OnGazeSelection?.Invoke();
         }
 
-        if (fillIndicator != null)
-        {
-            fillIndicator.fillAmount = Normalise();
-        }
+        fillIndicator.fillAmount = Normalise();
     }
-
     private float Normalise() 
     {
-        if (timeForSelection <= 0) return 0;
-        return Mathf.Clamp01(timeCounter / timeForSelection);
+        return (float)timeCounter / timeForSelection;
     }
 }
